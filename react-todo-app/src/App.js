@@ -36,8 +36,25 @@ export default class App extends Component {
 
   handleClick = (id) => {
     let newTodoData = this.state.todoData.filter((data) => data.id !== id);
-    // console.log(newTodoData, 'newTodoData');
     this.setState({ todoData: newTodoData });
+  };
+
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 새로운 할 일 데이터
+    let newTodo = {
+      id: Date.now(),
+      title: this.state.value,
+      completed: false,
+    };
+
+    // 원래 있던 할 일에 새로운 할 일 더해주기
+    this.setState({ todoData: [...this.state.todoData, newTodo] });
   };
 
   render() {
@@ -47,6 +64,7 @@ export default class App extends Component {
           <div className='title'>
             <h1>할 일 목록</h1>
           </div>
+
           {this.state.todoData.map((data) => (
             <div style={this.getStyle()} key={data.id}>
               <input type='checkbox' defaultChecked={data.completed} />
@@ -59,6 +77,24 @@ export default class App extends Component {
               </button>
             </div>
           ))}
+
+          <form style={{ display: 'flex' }} onSubmit={this.handleSubmit}>
+            <input
+              type='text'
+              name='value'
+              placeholder='할 일을 입력하세요'
+              value={this.state.value}
+              style={{ flex: '10', padding: '5px' }}
+              onChange={(e) => this.handleChange(e)}
+            />
+            <input
+              type='submit'
+              name='value'
+              className='btn'
+              value='입력'
+              style={{ flex: '1' }}
+            />
+          </form>
         </div>
       </div>
     );
